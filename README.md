@@ -1,7 +1,7 @@
 <h1 align="center">☁️ Azure CI/CD & Bicep IAC</h1>
 
 <p align="center">
-  <strong>Full-stack ToDo application deployed to Azure using Docker, Bicep, and Azure Pipelines</strong><br>
+  <strong>Multi-Container Web App deployed to Azure using Docker, Bicep, and Azure Pipelines</strong><br>
   <em>Developed as part of a school assignment where I handled the DevOps implementation.</em>
 </p>
 
@@ -10,7 +10,7 @@
 <h2>📘 Project Overview</h2>
 
 <p>
-This repository demonstrates a complete DevOps workflow for a containerized full-stack application.
+This repository demonstrates a complete DevOps workflow for a multi-container web app deployed to Azure.
 The setup automates <strong>build, push, and deployment</strong> processes using <strong>Azure Pipelines</strong> and provisions cloud resources with <strong>Bicep (Infrastructure as Code)</strong>.
 </p>
 
