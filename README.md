@@ -40,7 +40,7 @@ The file <code>azure-pipelines.yml</code> defines an automated pipeline that:
 </ul>
 
 <p>
-This setup enables a reliable and repeatable deployment process. The pipeline remains intentionally lightweight without multi-stage or unit testing implementation since the project’s was scope is small and experimental.
+This setup enables a reliable and repeatable deployment process. The pipeline remains intentionally lightweight without multi-stage or unit testing implementation since the project’s scope was small and experimental.
 </p>
 
 ---
