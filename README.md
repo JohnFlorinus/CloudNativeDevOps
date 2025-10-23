@@ -15,13 +15,14 @@ The setup automates <strong>build, push, and deployment</strong> processes using
 </p>
 
 <p>
-The system consists of two main components:
+The system consists of three main components:
 <ul>
   <li><strong>.NET API</strong></li>
   <li><strong>MVC Website</strong></li>
   <li><strong>MSSQL Database</strong></li>
 </ul>
-Both are deployed through Azure Container Registry (ACR) and hosted as Azure Container Apps.
+Frontend and backend are deployed through Azure Container Registry (ACR) and hosted as Azure Container Apps.
+Database is managed through Entity Framework Code-First and is separated from the pipeline.
 </p>
 
 ---
@@ -36,11 +37,10 @@ The file <code>azure-pipelines.yml</code> defines an automated pipeline that:
   <li>Builds the frontend and backend Docker images.</li>
   <li>Tags each image with both <code>latest</code> and the build ID.</li>
   <li>Pushes the images to <strong>Azure Container Registry</strong>.</li>
-  <li>Runs on Ubuntu agents using <strong>Azure DevOps</strong>.</li>
 </ul>
 
 <p>
-This ensures both services are automatically rebuilt and pushed to ACR whenever changes are committed to the main branch.
+This setup enables a reliable and repeatable deployment process. The pipeline remains intentionally lightweight without multi-stage or unit testing implementation since the project’s was scope is small and experimental.
 </p>
 
 ---
@@ -71,34 +71,3 @@ The use of separate modules ensures clarity and clean separation of concern.
   <li>Azure Pipeline builds and pushes Docker images to ACR.</li>
   <li>Container Apps pull the latest images from ACR → the application goes live.</li>
 </ol>
-
----
-
-<p>
-This project demonstrates my skills in <strong>DevOps automation</strong>, <strong>Azure Cloud architecture</strong>, and <strong>Infrastructure as Code (IaC)</strong>.
-</p>
-
----
-
-<h2>🧰 Technologies Used</h2>
-
-<table>
-  <tr><th>Category</th><th>Tools / Services</th></tr>
-  <tr><td>CI/CD</td><td>Azure Pipelines (YAML)</td></tr>
-  <tr><td>IaC</td><td>Bicep</td></tr>
-  <tr><td>Containers</td><td>Docker, Azure Container Registry, Container Apps</td></tr>
-  <tr><td>Database</td><td>Azure SQL Database</td></tr>
-  <tr><td>Languages</td><td>YAML, Bicep, C#, JavaScript</td></tr>
-</table>
-
----
-
-<h2>📄 Notes</h2>
-
-<p>
-This repository was created as part of a school assignment to demonstrate a full DevOps pipeline setup and infrastructure deployment on Azure.
-</p>
-
----
-
-<h3 align="center">💡 “Automate everything — code, build, deploy, and infrastructure.”</h3>
