@@ -1,0 +1,2 @@
+CLI RUN MAIN:
+az deployment sub create --location swedencentral --template-file main.bicep --name testingIAC
