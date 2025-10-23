@@ -1,0 +1,53 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '69e34b37-f813-4bd5-82b9-6bc99fb189a5'
+  imageRepository: 'todorepo'
+  containerRegistry: 'todoimageregistry.azurecr.io'
+  dockerfileBackendPath: '$(Build.SourcesDirectory)/ToDo-Backend/Dockerfile'
+  dockerfileFrontendPath: '$(Build.SourcesDirectory)/ToDo-Frontend/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push backend
+      inputs:
+        command: buildAndPush
+        repository: 'todobackend'
+        dockerfile: $(dockerfileBackendPath)
+        buildContext: $(Build.SourcesDirectory)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          latest
+          $(Build.BuildId)
+    - task: Docker@2
+      displayName: Build and push frontend
+      inputs:
+        command: buildAndPush
+        repository: 'todofrontend'
+        dockerfile: $(dockerfileFrontendPath)
+        buildContext: $(Build.SourcesDirectory)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          latest
+          $(Build.BuildId)
