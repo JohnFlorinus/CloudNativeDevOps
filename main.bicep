@@ -1,9 +1,10 @@
 targetScope = 'subscription'
 
 param sharedLocation string = 'swedencentral'
-param rgName string = 'rg-todolist-test2'
-param dbServerName string = 'ToDoDBServer2'
-param dbSqlName string = 'ToDoDB2'
+param rgName string = 'rg-todolistiac'
+param dbServerName string = 'tododbserveriac'
+param dbSqlName string = 'tododbiac'
+param ctrPrefixName string = 'todoctriac' // Prefix for ACR, Environment, and Container App Resource Names
 
 // 1. Deploy the Resource Group module
 module rgDeploy 'rg.bicep' = {
@@ -35,6 +36,7 @@ module containerDeploy 'containers.bicep' = {
   scope: resourceGroup(rgName)
   params: {
     location: sharedLocation
+    containerPrefix: ctrPrefixName
   }
   dependsOn: [
     rgDeploy

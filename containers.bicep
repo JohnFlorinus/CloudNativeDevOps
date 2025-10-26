@@ -1,12 +1,12 @@
 param location string
-param containerPrefix string = 'todocontainer'
+param containerPrefix string
 param acrAdminUsername string = 'admin01'
 @secure()
 param acrAdminPassword string = 'Jensen100'
 
 // --- Container Registry (ACR) ---
 resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
-  name: '${containerPrefix}-ACR'
+  name: '${containerPrefix}acr'
   location: location
   sku: {
     name: 'Basic'
@@ -18,7 +18,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
 
 // --- Container Apps Environment (Shared Environment) ---
 resource environment 'Microsoft.App/managedEnvironments@2024-03-01' = {
-  name: '${containerPrefix}-env'
+  name: '${containerPrefix}env'
   location: location
   properties: {
   }
@@ -33,7 +33,7 @@ var acrLoginSecret = {
 
 // --- Container App: todo-frontend ---
 resource frontendApp 'Microsoft.App/containerApps@2024-03-01' = {
-  name: '${containerPrefix}-frontend'
+  name: '${containerPrefix}frontend'
   location: location
   properties: {
     managedEnvironmentId: environment.id
