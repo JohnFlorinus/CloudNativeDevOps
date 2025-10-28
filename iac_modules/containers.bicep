@@ -1,10 +1,6 @@
 param location string
 param containerPrefix string
-param acrAdminUsername string = 'admin01'
-@secure()
-param acrAdminPassword string = 'Jensen100'
 
-// --- Container Registry (ACR) ---
 resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
   name: '${containerPrefix}acr'
   location: location
@@ -16,7 +12,10 @@ resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
   }
 }
 
-// --- Container Apps Environment (Shared Environment) ---
+var acrAdminCredentials = listCredentials(acr.id, acr.apiVersion)
+var acrAdminUsername = acrAdminCredentials.username // Använd det autogenererade användarnamnet
+var acrAdminPassword = acrAdminCredentials.passwords[0].value // Använd autogenererade lösenordet
+
 resource environment 'Microsoft.App/managedEnvironments@2024-03-01' = {
   name: '${containerPrefix}env'
   location: location
@@ -24,14 +23,14 @@ resource environment 'Microsoft.App/managedEnvironments@2024-03-01' = {
   }
 }
 
-// --- Container App Registry Credentials (Secret) ---
 var acrLoginSecret = {
   server: acr.properties.loginServer
   username: acrAdminUsername
   passwordSecretRef: 'acr-password'
 }
 
-// --- Container App: todo-frontend ---
+var dummyImage = 'nginx:latest'
+
 resource frontendApp 'Microsoft.App/containerApps@2024-03-01' = {
   name: '${containerPrefix}frontend'
   location: location
@@ -64,7 +63,7 @@ resource frontendApp 'Microsoft.App/containerApps@2024-03-01' = {
       containers: [
         {
           name: 'todo-frontend-container'
-          image: '${acr.properties.loginServer}/todo-frontend:latest'
+          image: dummyImage // replace manually with this: ${acr.properties.loginServer}/todo-frontend:latest
           resources: {
             cpu: 1
             memory: '2.0Gi'
@@ -75,10 +74,12 @@ resource frontendApp 'Microsoft.App/containerApps@2024-03-01' = {
   }
 }
 
-// --- Container App: todo-backend ---
 resource backendApp 'Microsoft.App/containerApps@2024-03-01' = {
-  name: '${containerPrefix}-backend'
+  name: '${containerPrefix}backend'
   location: location
+  identity: {
+    type: 'SystemAssigned' // System-Assigned Managed Identity for Key Vault RBAC
+  }
   properties: {
     managedEnvironmentId: environment.id
     configuration: {
@@ -108,7 +109,7 @@ resource backendApp 'Microsoft.App/containerApps@2024-03-01' = {
       containers: [
         {
           name: 'todo-backend-container'
-          image: '${acr.properties.loginServer}/todo-backend:latest'
+          image: dummyImage // replace manually with this: ${acr.properties.loginServer}/todo-backend:latest
           resources: {
             cpu: 1
             memory: '2.0Gi'
@@ -122,3 +123,6 @@ resource backendApp 'Microsoft.App/containerApps@2024-03-01' = {
 output frontendFqdn string = frontendApp.properties.latestRevisionFqdn
 output backendFqdn string = backendApp.properties.latestRevisionFqdn
 output acrLoginServer string = acr.properties.loginServer
+
+// for key vault RBAC
+output backendContainerAppPrincipalId string = backendApp.identity.principalId
