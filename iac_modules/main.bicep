@@ -1,11 +1,11 @@
 targetScope = 'subscription'
 
 param sharedLocation string = 'swedencentral'
-param rgName string = 'rg-todolist'
-param dbServerName string = 'tododbserver'
-param dbSqlName string = 'tododb'
-param ctrPrefixName string = 'todoctr' // Prefix for ACR, Environment, and Container App Resource Names
-param kvName string = 'todokv'
+param rgName string = 'rg-todolist4'
+param dbServerName string = 'tododbserver4'
+param dbSqlName string = 'tododb4'
+param ctrPrefixName string = 'todoctr4' // Prefix for ACR, Environment, and Container App Resource Names
+param kvName string = 'todokv4'
 
 // Resource Group
 module rgDeploy 'rg.bicep' = {
@@ -31,7 +31,7 @@ module sqlDeploy 'db.bicep' = {
   ]
 }
 
-// Containers
+// Container Apps, Environment, ACR
 module containerDeploy 'containers.bicep' = {
   name: 'ContainerResourcesDeployment'
   scope: resourceGroup(rgName)
