@@ -16,7 +16,7 @@ The file <code>azure-pipelines.yml</code> defines an automated pipeline that:
   <li>Builds the frontend and backend Docker images.</li>
   <li>Tags each image with both <code>latest</code> and the build ID.</li>
   <li>Pushes the images to <strong>Azure Container Registry</strong>.</li>
-  <li>Container Apps for frontend and backend are automatically updated, as they track the image in ACR.<li>
+  <li>Container Apps for frontend and backend are automatically updated, as they track the image in ACR.</li>
 </ul>
 
 <p>
